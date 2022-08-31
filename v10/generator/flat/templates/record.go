@@ -188,15 +188,23 @@ func (r *{{ .GoType }}) UnmarshalJSON(data []byte) (error) {
 	}()
 
 	if val != nil {
+		{{ if (isUnion $field.Type) -}}
+		{{ $.ConstructableForField $field -}}
+		if err := r.{{$field.GoName}}.UnmarshalJSON([]byte(val)); err != nil {
+			return err
+		}
+		{{ else -}}
 		if err := json.Unmarshal([]byte(val), &r.{{ $field.GoName}}); err != nil {
 			return err
 		}
-	} else {
-        	{{ if .HasDefault -}}
-		{{ if $.ConstructableForField $field | ne "" -}}
-		{{ $.ConstructableForField $field }}
 		{{ end -}}
-       	 	{{ $.DefaultForField $field }}
+	} else {
+		{{ if .HasDefault -}}
+		{{ if $.ConstructableForField $field | ne "" -}}
+		{{ $.ConstructableForField $field -}}
+		{{ else -}}
+		{{ $.DefaultForField $field -}}
+		{{ end -}}
 		{{ else -}}
 		return fmt.Errorf("no value specified for {{ $field.Name }}")
 		{{ end -}}
