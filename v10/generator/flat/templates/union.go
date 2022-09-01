@@ -154,7 +154,7 @@ func (r {{ .GoType }}) MarshalJSON() ([]byte, error) {
 	{{ range $i, $t := .ItemTypes -}}
 	{{ if ne $i $.NullIndex -}}
 	case {{ $.ItemName $t }}:
-		return json.Marshal(map[string]interface{}{"{{ .UnionKey }}": r.{{ .Name }}})
+		return json.Marshal(r.{{ .Name }})
         {{ end -}}
 	{{ end -}}
 	}
