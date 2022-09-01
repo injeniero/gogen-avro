@@ -187,7 +187,7 @@ func (r *{{ .GoType }}) UnmarshalJSON(data []byte) (error) {
 		return nil
 	}()
 
-	if val != nil {
+	if val != nil && string(val) != "null" {
 		{{ if (isUnion $field.Type) -}}
 		{{ $.ConstructableForField $field -}}
 		if err := r.{{$field.GoName}}.UnmarshalJSON([]byte(val)); err != nil {
@@ -201,7 +201,9 @@ func (r *{{ .GoType }}) UnmarshalJSON(data []byte) (error) {
 	} else {
 		{{ if .HasDefault -}}
 		{{ if $.ConstructableForField $field | ne "" -}}
+		{{ if not (isUnion $field.Type) }}
 		{{ $.ConstructableForField $field -}}
+        {{ end -}}
 		{{ else -}}
 		{{ $.DefaultForField $field -}}
 		{{ end -}}
