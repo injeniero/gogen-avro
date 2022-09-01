@@ -6,8 +6,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/actgardner/gogen-avro/v10/container"
-	"github.com/actgardner/gogen-avro/v10/example/avro"
+	"github.com/injeniero/gogen-avro/v10/container"
+	"github.com/injeniero/gogen-avro/v10/example/avro"
 )
 
 func main() {
